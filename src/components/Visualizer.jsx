@@ -18,7 +18,7 @@ export default function Visualizer({ nodes = [], edges = [], onNodesChange, onEd
   const styledEdges = edges.map(edge => ({
     ...edge,
     style: { ...edge.style, strokeWidth: 3, stroke: "black" },
-    animated: true,
+    animated: true, // This is what makes the line dotted/moving!
   }));
 
   return (
@@ -38,17 +38,19 @@ export default function Visualizer({ nodes = [], edges = [], onNodesChange, onEd
       </ReactFlow>
       </LayoutGroup>
 
-      {/* COMPACT LEGEND */}
+      {/* FIXED LEGEND */}
       <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-2 rounded-lg border-2 border-black shadow-[3px_3px_0px_rgba(0,0,0,1)] z-10 scale-90 origin-top-left">
         <div className="font-black mb-1 text-black uppercase tracking-widest text-[10px] border-b-2 border-black pb-0.5">Legend</div>
         
+        {/* Updated: Shows Dotted Black Line for Next */}
         <div className="flex items-center gap-2 mb-1">
-           <div className="w-6 h-1 bg-black"></div>
+           <div className="w-6 h-0 border-b-4 border-black border-dotted"></div> 
            <span className="font-bold text-[10px] text-black">Next</span>
         </div>
 
+        {/* Prev Pointer */}
         <div className="flex items-center gap-2">
-           <div className="w-6 h-1 border-b-4 border-yellow-500 border-dotted"></div>
+           <div className="w-6 h-0 border-b-4 border-amber-500 border-dotted"></div>
            <span className="font-bold text-[10px] text-black">Prev</span>
         </div>
       </div>
