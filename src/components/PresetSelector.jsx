@@ -85,7 +85,7 @@ export default function PresetSelector({ onSelect }) {
         </div>
       </div>
 
-      {/* 1. THE NEW "START SCRATCH" BUTTON */}
+      {/* 1. START SCRATCH BUTTON */}
       <button
           onClick={() => onSelect("# 🟢 Start coding below:\n\nhead = Node(1)")}
           className="group relative w-full h-10 mb-2"
@@ -100,7 +100,7 @@ export default function PresetSelector({ onSelect }) {
       </button>
       
       {/* 2. The Examples List */}
-      <div className="grid grid-cols-1 gap-2 opacity-80 hover:opacity-100 transition-opacity">
+      <div className="grid grid-cols-1 gap-2 opacity-90 hover:opacity-100 transition-opacity">
       {Object.entries(PRESETS).map(([key, item]) => (
         <button
           key={key}
@@ -117,6 +117,17 @@ export default function PresetSelector({ onSelect }) {
         </button>
       ))}
       </div>
+
+      {/* 3. YOUR SIGNATURE BADGE (Added Here) */}
+      <div className="mt-4 pt-2 border-t-2 border-dashed border-gray-300 flex flex-col items-center gap-1 text-[10px] text-gray-500 font-bold opacity-70 hover:opacity-100 transition-opacity">
+          <span>
+             Built by <span className="text-purple-600 uppercase">MR.MINEJES</span>
+          </span>
+          <span className="flex items-center gap-1">
+             💬 Discord: <span className="text-blue-500">SpidyOnRest</span>
+          </span>
+      </div>
+
     </div>
   );
 }

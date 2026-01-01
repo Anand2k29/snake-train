@@ -127,7 +127,6 @@ head.next = Node(20)
                      2. 👀 <strong>Visualize:</strong> Watch the Linked List build itself instantly.
                   </p>
                   <p className="bg-green-100 p-3 rounded border-2 border-black">
-                     {/* FIX: Removed red wavy line, made it Red and Bold instead */}
                      3. 🖱️ <strong>Interact:</strong> <span className="font-black text-red-500">You can DRAG the nodes</span> to rearrange them!
                   </p>
               </div>
@@ -188,15 +187,6 @@ head.next = Node(20)
           <CodeEditor code={code} setCode={setCode} />
         </div>
         <PresetSelector onSelect={handlePresetSelect} />
-      </div>
-
-      {/* 👾 YOUR DISCORD CREDIT BADGE (Bottom Right Corner) */}
-      <div className="fixed bottom-3 right-5 z-50 bg-white px-3 py-1.5 rounded-lg border-2 border-black shadow-[4px_4px_0px_black] text-[11px] font-bold text-black flex items-center gap-2 hover:-translate-y-1 transition-transform cursor-default rotate-[-2deg] hover:rotate-0">
-          <span>✨ Created by <span className="uppercase text-purple-600">Mr.Minejes</span></span>
-          <span className="w-0.5 h-3 bg-gray-300"></span>
-          <span className="flex items-center gap-1">
-             💬 Discord: <span className="text-blue-600 font-mono">SpidyOnRest</span>
-          </span>
       </div>
 
     </main>
