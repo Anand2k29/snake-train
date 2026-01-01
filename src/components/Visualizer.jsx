@@ -15,41 +15,41 @@ export default function Visualizer({ nodes = [], edges = [], onNodesChange, onEd
     type: 'linkedListNode', 
   }));
 
+  const styledEdges = edges.map(edge => ({
+    ...edge,
+    style: { ...edge.style, strokeWidth: 3, stroke: "black" },
+    animated: true,
+  }));
+
   return (
-    <div className="h-full w-full bg-gray-900">
+    <div className="h-full w-full bg-[#85dcff]"> 
       <LayoutGroup>
       <ReactFlow 
         nodes={styledNodes} 
-        edges={edges} 
+        edges={styledEdges} 
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes} 
         fitView
         panActivationKeyCode={null} 
       >
-        <Background color="#255" gap={20} />
-        <Controls />
+        <Background color="#000" gap={25} size={2} variant="dots" style={{ opacity: 0.1 }} />
+        <Controls className="!bg-white !border-2 !border-black !shadow-[4px_4px_0px_black] !m-4" />
       </ReactFlow>
       </LayoutGroup>
 
-      <div className="absolute top-5 left-4 bg-black/60 backdrop-blur-sm p-3 rounded-lg border border-gray-700 text-[10px] text-gray-300 z-10 shadow-xl pointer-events-none select-none">
-        <div className="font-bold mb-2 text-gray-500 uppercase tracking-widest text-[9px]">Legend</div>
+      {/* COMPACT LEGEND */}
+      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-2 rounded-lg border-2 border-black shadow-[3px_3px_0px_rgba(0,0,0,1)] z-10 scale-90 origin-top-left">
+        <div className="font-black mb-1 text-black uppercase tracking-widest text-[10px] border-b-2 border-black pb-0.5">Legend</div>
         
-        <div className="flex items-center gap-3 mb-1.5">
-           <div className="w-8 h-0.5 border-b border-green-400 border-dashed overflow-hidden">
-              {/*<div className="absolute inset-0 bg-white/50 w-full h-full animate-pulse"></div>*/}
-           </div>
-           <span>Next (Forward)</span>
+        <div className="flex items-center gap-2 mb-1">
+           <div className="w-6 h-1 bg-black"></div>
+           <span className="font-bold text-[10px] text-black">Next</span>
         </div>
 
-        <div className="flex items-center gap-3 mb-1.5">
-           <div className="w-8 h-0.5 border-b border-yellow-400 border-dashed"></div>
-           <span>Prev (Backward)</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-           <div className="w-8 h-0.5 border-b border-red-800 border-dashed"></div>
-           <span>Circular / Cycle</span>
+        <div className="flex items-center gap-2">
+           <div className="w-6 h-1 border-b-4 border-yellow-500 border-dotted"></div>
+           <span className="font-bold text-[10px] text-black">Prev</span>
         </div>
       </div>
 

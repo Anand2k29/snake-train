@@ -2,41 +2,47 @@ import { Handle, Position } from "reactflow";
 import { motion } from "framer-motion";
 
 export default function LinkedListNode({ data }) {
+  // Randomize color slightly based on label or just stick to a theme
+  const isHead = data.pointers && data.pointers.includes('head');
+
   return (
-    <div className="relative">
-      {/* 1. The Pointers Stacked Above */}
-      <div className="absolute bottom-[100%] left-1/2 -translate-x-1/2 w-max flex flex-col-reverse items-center gap-1 mb-2 pointer-events-none">
+    <div className="relative group">
+      {/* 1. The Pointers (Stickers) */}
+      <div className="absolute bottom-[110%] left-1/2 -translate-x-1/2 w-max flex flex-col-reverse items-center gap-2 pointer-events-none z-10">
         {data.pointers && data.pointers.map((ptr) => (
           <motion.div 
             key={ptr}
             layoutId={ptr}
-            transition={{type: "spring", stiffness: 300, damping: 25}} 
-            className="bg-yellow-500 text-black text-[10px] px-2 py-0.5 rounded-full shadow-md font-bold uppercase tracking-wider"
+            transition={{type: "spring", stiffness: 300, damping: 20}} 
+            className="bg-purple-400 text-white border-2 border-black text-xs px-3 py-1 rounded-full font-black uppercase shadow-[3px_3px_0px_black] rotate-[-5deg]"
           >
-            {ptr} ▼
+            {ptr} 👇
           </motion.div>
         ))}
       </div>
 
-      {/* 2. Actual Node (Box) */}
-      <div className="w-16 h-16 bg-white border-2 border-gray-200 rounded-lg flex items-center justify-center shadow-xl">
-        <div className="text-xl font-bold text-gray-800">
+      {/* 2. Actual Node (The Cartoon Box) */}
+      <div className={`
+        w-20 h-20 flex items-center justify-center
+        border-4 border-black rounded-xl
+        shadow-[6px_6px_0px_black]
+        transition-transform hover:-translate-y-1
+        ${isHead ? 'bg-yellow-300' : 'bg-white'}
+      `}>
+        <div className="text-2xl font-black text-black font-mono">
             {data.label}
         </div>
       </div>
 
-      {/* 3. Connectors (Handles) */}
-      {/* for next pointers */}
-      <Handle type="target" position={Position.Left} id = "next-tgt" className="bg-gray-400!" style={{top: '35%'}}/>
-      <Handle type="source" position={Position.Right} id = "next-src" className="bg-black! w-2! h-2!" style={{top:'35%'}}/>
+      {/* 3. Connectors (Handles) - styled larger */}
+      <Handle type="target" position={Position.Left} id="next-tgt" className="!w-4 !h-4 !bg-blue-500 !border-2 !border-black" style={{top: '35%'}}/>
+      <Handle type="source" position={Position.Right} id="next-src" className="!w-4 !h-4 !bg-black !border-2 !border-white" style={{top:'35%'}}/>
 
-      {/* for prev pointers */}
-      <Handle type="source" position={Position.Left} id = "prev-src" className="bg-black! w-2! h-2!" style={{top:'65%'}}/>
-      <Handle type="target" position={Position.Right} id = "prev-tgt" className="bg-gray-400!" style={{top:'65%'}}/>
+      <Handle type="source" position={Position.Left} id="prev-src" className="!w-3 !h-3 !bg-black" style={{top:'65%'}}/>
+      <Handle type="target" position={Position.Right} id="prev-tgt" className="!w-3 !h-3 !bg-orange-400" style={{top:'65%'}}/>
 
-        {/* Cyclic / circulra pointers*/}
-      <Handle type="source" position={Position.Bottom} id="t-src" className="bg-transparent!" style={{ left: '60%' }} />
-      <Handle type="target" position={Position.Bottom} id="t-tgt" className="bg-transparent!" style={{ left: '40%' }} />
+      <Handle type="source" position={Position.Bottom} id="t-src" className="opacity-0" style={{ left: '60%' }} />
+      <Handle type="target" position={Position.Bottom} id="t-tgt" className="opacity-0" style={{ left: '40%' }} />
     </div>
   );
 }

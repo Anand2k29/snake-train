@@ -1,43 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f0f0f0;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --pop-blue: #a3d5ff;
+  --pop-yellow: #fff59d;
+  --pop-pink: #ffadad;
+  --pop-green: #b6ffb4;
 }
 
 body {
-  background: var(--background);
+  background-color: #fffdf5; /* Cream background */
+  background-image: radial-gradient(#000000 1px, transparent 1px);
+  background-size: 20px 20px; /* Polka dot effect */
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Verdana', 'Comic Sans MS', sans-serif; /* Playful font stack */
 }
 
+/* Custom Scrollbar to match cartoon theme */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+  border-left: 2px solid black;
+}
+::-webkit-scrollbar-thumb {
+  background: #ff6b6b;
+  border: 2px solid black;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ff4757;
+}
+
+/* Utilities for that "Cartoon" look */
 @layer utilities {
-  @keyframes ghost-float {
-    0% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: translateY(-30px) scale(0.9);
-    }
+  .neo-box {
+    border: 3px solid black;
+    box-shadow: 5px 5px 0px 0px rgba(0,0,0,1);
+    transition: all 0.1s ease-in-out;
+  }
+  
+  .neo-box:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
   }
 
-  .animate-ghost {
-    animation: ghost-float 1s ease-out forwards;
+  .neo-button {
+    @apply font-bold uppercase tracking-wider px-4 py-2 border-2 border-black rounded-lg shadow-[4px_4px_0px_black] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_black] transition-all;
   }
 }
