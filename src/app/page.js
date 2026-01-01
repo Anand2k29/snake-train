@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import Script from "next/script"; // <--- This was the missing line causing the error
+import Script from "next/script"; 
 import CodeEditor from "../components/CodeEditor";
 import Visualizer from "../components/Visualizer";
 import { SETUP_CODE } from "../utils/pythonSetup";
@@ -12,7 +12,23 @@ export default function Home() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [history, setHistory] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
-  const [code, setCode] = useState("# create nodes to visualize!\n# eg. head = Node(5)\n# eg. head.next = Node(18)")
+  
+  // --- UPDATED: Default code is now a Mini-Tutorial ---
+  const [code, setCode] = useState(`# 🐍 Welcome to Snake-Train!
+# -----------------------------
+# Type code here to build your list line-by-line.
+# Watch the visualizer on the left update instantly!
+
+# 1. Start by creating a head node:
+head = Node(10)
+
+# 2. Add a second node:
+head.next = Node(20)
+
+# 3. Now it's your turn...
+# Try typing: head.next.next = Node(30)
+`);
+
   const [output, setOutput] = useState("")
   const [isPyodideReady, setIsPyodideReady] = useState(false);
   const pyodideRef = useRef(null);
@@ -92,12 +108,9 @@ export default function Home() {
 
       {/* LEFT CARD: Visualizer + Console */}
       <div className="w-[60%] flex flex-col neo-box bg-white rounded-xl overflow-hidden relative">
-        
-        {/* Visualizer Area */}
         <div className="flex-grow relative border-b-3 border-black">
             <Visualizer nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} />
 
-            {/* Run Button */}
             <button 
                 className={`absolute top-4 right-4 z-10 neo-button ${!isPyodideReady ? "bg-gray-300 text-gray-500" : "bg-[#4ADE80] text-black hover:bg-[#22c55e]"}`}
                 onClick={runCode}
@@ -106,7 +119,6 @@ export default function Home() {
                 {!isPyodideReady ? "Loading..." : "Run Code ▶"}
             </button>
             
-            {/* Live Mode Toggle */}
             <div className="absolute top-6 right-[12rem] z-10 flex items-center gap-2 bg-white px-3 py-1 rounded-full border-2 border-black shadow-[2px_2px_0px_black]">
                 <div className={`w-3 h-3 rounded-full border border-black ${isAutoRun ? "bg-green-500" : "bg-red-500"}`} />
                 <label className="text-xs font-bold text-black cursor-pointer select-none">
@@ -116,7 +128,6 @@ export default function Home() {
             </div>
         </div>
 
-        {/* Scrubber Bar */}
         {history.length > 0 && (
             <div className="h-14 bg-yellow-100 flex items-center px-4 gap-4 z-20 shrink-0 border-b-3 border-black">
                 <button onClick={() => handleScrub({target: {value: Math.max(0, currentStep - 1)}})} className="neo-button bg-white text-xs py-1 px-2">◀</button>
@@ -129,22 +140,17 @@ export default function Home() {
             </div>
         )}
 
-        {/* Console Output */}
         <div className="h-32 bg-black text-green-400 p-2 font-mono text-xs overflow-auto shrink-0 border-t-2 border-black">
             <div className="text-white mb-1 uppercase font-bold">Console Output:</div>
             <pre className="whitespace-pre-wrap">{output}</pre>
         </div>
       </div>
 
-      {/* RIGHT CARD: Code Editor + Vertical Presets */}
+      {/* RIGHT CARD: Code Editor + Examples */}
       <div className="w-[40%] flex flex-col neo-box bg-white rounded-xl overflow-hidden">
-        
-        {/* Editor on Top */}
         <div className="flex-grow relative border-b-3 border-black">
           <CodeEditor code={code} setCode={setCode} />
         </div>
-
-        {/* Presets on Bottom (Vertical List) */}
         <PresetSelector onSelect={handlePresetSelect} />
       </div>
     </main>
