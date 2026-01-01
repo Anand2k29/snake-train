@@ -13,7 +13,10 @@ export default function Home() {
   const [history, setHistory] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   
-  // --- UPDATED: Default code is now a Mini-Tutorial ---
+  // Tutorial Modal State
+  const [showTutorial, setShowTutorial] = useState(true);
+
+  // Default Mini-Tutorial Code
   const [code, setCode] = useState(`# 🐍 Welcome to Snake-Train!
 # -----------------------------
 # Type code here to build your list line-by-line.
@@ -103,10 +106,42 @@ head.next = Node(20)
   };
 
   return (
-    <main className="flex h-screen w-screen p-4 gap-4 overflow-hidden">
+    <main className="flex h-screen w-screen p-4 gap-4 overflow-hidden relative">
       <Script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js" strategy="afterInteractive" onLoad={initPyodide} />
 
-      {/* LEFT CARD: Visualizer + Console */}
+      {/* 🟢 TUTORIAL MODAL (Instruction Page) */}
+      {showTutorial && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+           <div className="bg-white p-6 rounded-xl border-4 border-black shadow-[8px_8px_0px_black] max-w-md w-full animate-in zoom-in-95 duration-200">
+              
+              <div className="flex justify-between items-center mb-4 border-b-2 border-black pb-2">
+                 <h2 className="text-2xl font-black uppercase italic tracking-tighter">🐍 Snake Train</h2>
+                 <span className="text-xl">👋</span>
+              </div>
+
+              <div className="space-y-4 text-sm font-medium">
+                  <p className="bg-yellow-100 p-3 rounded border-2 border-black">
+                     1. 📝 <strong>Write Code:</strong> Type Python code on the right panel.
+                  </p>
+                  <p className="bg-blue-100 p-3 rounded border-2 border-black">
+                     2. 👀 <strong>Visualize:</strong> Watch the Linked List build itself instantly.
+                  </p>
+                  <p className="bg-green-100 p-3 rounded border-2 border-black">
+                     3. 🖱️ <strong>Interact:</strong> <span className="underline decoration-wavy decoration-red-500 font-bold">You can DRAG the nodes</span> to rearrange them!
+                  </p>
+              </div>
+
+              <button 
+                onClick={() => setShowTutorial(false)}
+                className="w-full mt-6 bg-black text-white font-bold uppercase py-3 rounded border-2 border-black hover:bg-gray-800 hover:translate-y-[2px] hover:shadow-none shadow-[4px_4px_0px_gray] transition-all"
+              >
+                Let's Code! 🚀
+              </button>
+           </div>
+        </div>
+      )}
+
+      {/* LEFT CARD: Visualizer */}
       <div className="w-[60%] flex flex-col neo-box bg-white rounded-xl overflow-hidden relative">
         <div className="flex-grow relative border-b-3 border-black">
             <Visualizer nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} />
@@ -146,7 +181,7 @@ head.next = Node(20)
         </div>
       </div>
 
-      {/* RIGHT CARD: Code Editor + Examples */}
+      {/* RIGHT CARD: Code Editor */}
       <div className="w-[40%] flex flex-col neo-box bg-white rounded-xl overflow-hidden">
         <div className="flex-grow relative border-b-3 border-black">
           <CodeEditor code={code} setCode={setCode} />
