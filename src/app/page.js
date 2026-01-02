@@ -68,7 +68,7 @@ export default function Home() {
     if (language !== "python") {
         return;
     }
-
+ 
     setOutput("");
     setHistory([]);
     if (window.pyWorker) window.pyWorker.terminate();
@@ -145,6 +145,19 @@ export default function Home() {
                   <p className="bg-green-100 p-3 rounded border-2 border-black">
                      3. 🖱️ <strong>Interact:</strong> <span className="font-black text-red-500">You can DRAG the nodes</span> to rearrange them!
                   </p>
+                  
+                  {/* 👇 NEW 4th POINT ADDED HERE 👇 */}
+                  <p className="bg-purple-100 p-3 rounded border-2 border-black flex items-center gap-2">
+                     4. 🐙 <strong>Contribute:</strong> Found a bug? 
+                     <a 
+                        href="https://github.com/Anand2k29/snake-train" 
+                        target="_blank" 
+                        className="underline font-bold text-purple-700 hover:text-black"
+                     >
+                        Star us on GitHub!
+                     </a>
+                  </p>
+
               </div>
               <button onClick={() => setShowTutorial(false)} className="w-full mt-6 bg-black text-white font-bold uppercase py-3 rounded border-2 border-black hover:bg-gray-800 shadow-[4px_4px_0px_gray] transition-all">
                 Let's Code! 🚀
