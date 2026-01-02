@@ -68,7 +68,7 @@ export default function Home() {
     if (language !== "python") {
         return;
     }
- 
+
     setOutput("");
     setHistory([]);
     if (window.pyWorker) window.pyWorker.terminate();
@@ -146,16 +146,13 @@ export default function Home() {
                      3. 🖱️ <strong>Interact:</strong> <span className="font-black text-red-500">You can DRAG the nodes</span> to rearrange them!
                   </p>
                   
-                  {/* 👇 NEW 4th POINT ADDED HERE 👇 */}
-                  <p className="bg-purple-100 p-3 rounded border-2 border-black flex items-center gap-2">
-                     4. 🐙 <strong>Contribute:</strong> Found a bug? 
-                     <a 
-                        href="https://github.com/Anand2k29/snake-train" 
-                        target="_blank" 
-                        className="underline font-bold text-purple-700 hover:text-black"
-                     >
-                        Star us on GitHub!
-                     </a>
+                  {/* 👇 UPDATED 4th POINT (Directs to Sidebar) 👇 */}
+                  <p className="bg-purple-100 p-3 rounded border-2 border-black">
+                     4. 🐙 <strong>Open Source:</strong> Want to contribute? 
+                     <br/>
+                     <span className="text-xs font-medium text-purple-900 mt-1 block">
+                        Find the <strong>GitHub Link</strong> in the sidebar (below the examples).
+                     </span>
                   </p>
 
               </div>
