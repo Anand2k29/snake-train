@@ -6,7 +6,24 @@ import Visualizer from "../components/Visualizer";
 import { SETUP_CODE } from "../utils/pythonSetup";
 import { useNodesState, useEdgesState } from "reactflow";
 import PresetSelector from "../components/PresetSelector";
-import { transpileToPython, TEMPLATES } from "../utils/transpiler";
+// import { transpileToPython } from "../utils/transpiler"; // 🔴 DISABLED FOR NOW
+
+// 🟡 TEMPORARY TEMPLATES
+const TEMPLATES = {
+  python: `# 🐍 Python Mode
+# Write your code below:
+head = Node(10)
+head.next = Node(20)
+`,
+  java: `# ☕ Java Mode (Coming Soon!)
+# Support for Java is currently in development.
+# Please use Python for now!
+`,
+  cpp: `# 🚀 C++ Mode (Coming Soon!)
+# Support for C++ is currently in development.
+# Please use Python for now!
+`
+};
 
 export default function Home() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -16,7 +33,6 @@ export default function Home() {
   
   const [language, setLanguage] = useState("python");
 
-  // Default Code is now dynamic based on template
   const [code, setCode] = useState(TEMPLATES.python);
   const [output, setOutput] = useState("")
   const [isPyodideReady, setIsPyodideReady] = useState(false);
@@ -24,7 +40,6 @@ export default function Home() {
   const [isAutoRun, setIsAutoRun] = useState(true);
   const [showTutorial, setShowTutorial] = useState(true);
 
-  // When user switches dropdown, we update language and the code in editor
   const handleLanguageChange = (newLang) => {
     setLanguage(newLang);
     setCode(TEMPLATES[newLang]); 
@@ -49,17 +64,21 @@ export default function Home() {
   }
 
   const runCode = () => {
+    // 🟡 If mode is not Python, don't run anything to prevent errors
+    if (language !== "python") {
+        return;
+    }
+
     setOutput("");
     setHistory([]);
     if (window.pyWorker) window.pyWorker.terminate();
     const worker = new Worker("/pyWorker.js");
     window.pyWorker = worker;
 
-    // 1. Transpile (Convert Java/C++ -> Python)
-    const rawCode = typeof code === "string" ? code : "";
-    const pythonCode = transpileToPython(rawCode, language);
+    // 🔴 DISABLED TRANSPILER: Just treat everything as Python for now
+    // const pythonCode = transpileToPython(code, language); 
+    const pythonCode = code;
 
-    // 2. Prepare for Python Engine
     const hasCode = pythonCode.split('\n').some(line => line.trim() && !line.trim().startsWith('#'));
     const indentedCode = hasCode ? pythonCode.split('\n').map(line => '    ' + line).join('\n') : '    pass';
     const protectedCode = `try:\n${indentedCode}\nexcept Exception as e:\n    raise e`;
@@ -100,8 +119,6 @@ export default function Home() {
   };
 
   const handlePresetSelect = (newCode) => {
-    // We do NOT switch language here anymore. 
-    // The preset selector already sends the correct code for the current language.
     setCode(newCode);
   };
 
@@ -119,7 +136,8 @@ export default function Home() {
               </div>
               <div className="space-y-4 text-sm font-medium">
                   <p className="bg-yellow-100 p-3 rounded border-2 border-black">
-                     1. 📝 <strong>Write Code:</strong> Select Python, Java, or C++!
+                     1. 📝 <strong>Write Code:</strong> Python is fully supported! <br/>
+                     <span className="text-[10px] text-gray-500">(Java & C++ coming soon)</span>
                   </p>
                   <p className="bg-blue-100 p-3 rounded border-2 border-black">
                      2. 👀 <strong>Visualize:</strong> Watch the Linked List build itself.
@@ -174,8 +192,6 @@ export default function Home() {
             setLanguage={handleLanguageChange} 
           />
         </div>
-        
-        {/* Pass Language Prop Here! */}
         <PresetSelector onSelect={handlePresetSelect} language={language} />
       </div>
 
