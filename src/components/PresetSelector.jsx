@@ -1,107 +1,58 @@
 "use client";
+import LiveStats from "./LiveStats";
 
-const PRESETS = {
-    basic: {
-        label: "Basic List",
-        icon: "🔗",
-        color: "bg-cyan-200", 
-        code: `# Basic singly linked list
-head = Node(9)
-head.next = Node(18)
-head.next.next = Node(27)
-head.next.next.next = Node(36)
-head.next.next.next.next = Node(45)`
-    },
-    cycle: {
-        label: "Cycle / Loop",
-        icon: "🔄",
-        color: "bg-rose-200", 
-        code: `# cyclic Linked List
-head = Node(1)
-node2 = Node(2)
-node3 = Node(3)
-node4 = Node(4)
-node5 = Node(5)
-
-head.next = node2
-node2.next = node3
-node3.next = node4
-node4.next = node5
-node5.next = node2`
-    },
-    circular: {
-        label: "Circular List",
-        icon: "⭕",
-        color: "bg-violet-200", 
-        code: `# circular Linked List
-head = Node(1)
-second = Node(2)
-third = Node(3)
-fourth = Node(4)
-
-head.next = second
-second.next = third
-third.next = fourth
-fourth.next = head`
-    },
-    intersection: {
-        label: "Intersection",
-        icon: "Y",
-        color: "bg-amber-200", 
-        code: `# Linked List with an intersection
-common = Node(8)
-common.next = Node(7)
-
-headA = Node(1)
-headA.next = Node(9)
-headA.next.next = common
-
-headB = Node(3)
-headB.next = common`
-    },
-    doubly: {
-        label: "Doubly Linked",
-        icon: "↔️",
-        color: "bg-emerald-200", 
-        code: `# Doubly Linked List
-head = Node(9)
-head.next = Node(18)
-head.next.prev = head
-head.next.next = Node(27)
-head.next.next.prev = head.next
-head.next.next.next = Node(36)
-head.next.next.next.prev = head.next.next`
-    },
+// 1. DATA: Define Presets for ALL languages
+const PRESETS_DATA = {
+  python: {
+    basic: { label: "Basic List", icon: "🔗", color: "bg-cyan-200", code: `head = Node(10)\nhead.next = Node(20)\nhead.next.next = Node(30)` },
+    cycle: { label: "Cycle Loop", icon: "🔄", color: "bg-rose-200", code: `head = Node(1)\nnode2 = Node(2)\nhead.next = node2\nnode2.next = head` },
+    circular: { label: "Circular", icon: "⭕", color: "bg-violet-200", code: `head = Node(1)\nsecond = Node(2)\nthird = Node(3)\nhead.next = second\nsecond.next = third\nthird.next = head` },
+  },
+  java: {
+    basic: { label: "Basic List", icon: "🔗", color: "bg-cyan-200", code: `Node head = new Node(10);\nhead.next = new Node(20);\nhead.next.next = new Node(30);` },
+    cycle: { label: "Cycle Loop", icon: "🔄", color: "bg-rose-200", code: `Node head = new Node(1);\nNode node2 = new Node(2);\nhead.next = node2;\nnode2.next = head;` },
+    circular: { label: "Circular", icon: "⭕", color: "bg-violet-200", code: `Node head = new Node(1);\nNode second = new Node(2);\nNode third = new Node(3);\nhead.next = second;\nsecond.next = third;\nthird.next = head;` },
+  },
+  cpp: {
+    basic: { label: "Basic List", icon: "🔗", color: "bg-cyan-200", code: `Node* head = new Node(10);\nhead->next = new Node(20);\nhead->next->next = new Node(30);` },
+    cycle: { label: "Cycle Loop", icon: "🔄", color: "bg-rose-200", code: `Node* head = new Node(1);\nNode* node2 = new Node(2);\nhead->next = node2;\nnode2->next = head;` },
+    circular: { label: "Circular", icon: "⭕", color: "bg-violet-200", code: `Node* head = new Node(1);\nNode* second = new Node(2);\nNode* third = new Node(3);\nhead->next = second;\nsecond->next = third;\nthird->next = head;` },
+  }
 };
 
-export default function PresetSelector({ onSelect }) {
+export default function PresetSelector({ onSelect, language }) {
+  
+  // 2. LOGIC: Pick the correct list based on the language prop
+  // If language is undefined, default to python
+  const currentPresets = PRESETS_DATA[language] || PRESETS_DATA["python"];
+
   return (
     <div className="flex flex-col gap-2 p-3 bg-white h-48 overflow-y-auto border-t-0 border-black">
       
       {/* Header */}
       <div className="sticky top-0 bg-white z-10 py-1 border-b-2 border-dashed border-gray-300 mb-1 flex justify-between items-center">
         <div className="text-black text-xs font-black uppercase tracking-wider">
-            📚 Examples
+            📚 {language.toUpperCase()} Examples
         </div>
       </div>
 
-      {/* 1. START SCRATCH BUTTON */}
+      {/* Start Scratch Button */}
       <button
-          onClick={() => onSelect("# 🟢 Start coding below:\n\nhead = Node(1)")}
+          onClick={() => onSelect(language === 'python' ? "# New Code\nhead = Node(1)" : "// New Code\nNode head = new Node(1);")}
           className="group relative w-full h-10 mb-2"
         >
             <div className="absolute inset-0 bg-black translate-x-0.5 translate-y-0.5 rounded transition-transform group-hover:translate-x-1 group-hover:translate-y-1"></div>
             <div className="relative border-2 border-black bg-white rounded px-2 h-full flex items-center justify-center gap-2 transition-transform group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 group-active:translate-x-0 group-active:translate-y-0">
                 <span className="text-sm">✨</span>
                 <span className="text-xs font-black text-black uppercase tracking-wider">
-                    Create New (Empty)
+                    Create New ({language})
                 </span>
             </div>
       </button>
       
-      {/* 2. The Examples List */}
+      {/* Dynamic List */}
       <div className="grid grid-cols-1 gap-2 opacity-90 hover:opacity-100 transition-opacity">
-      {Object.entries(PRESETS).map(([key, item]) => (
+      {Object.entries(currentPresets).map(([key, item]) => (
         <button
           key={key}
           onClick={() => onSelect(item.code)}
@@ -118,14 +69,12 @@ export default function PresetSelector({ onSelect }) {
       ))}
       </div>
 
-      {/* 3. YOUR SIGNATURE BADGE (Added Here) */}
-      <div className="mt-4 pt-2 border-t-2 border-dashed border-gray-300 flex flex-col items-center gap-1 text-[10px] text-gray-500 font-bold opacity-70 hover:opacity-100 transition-opacity">
-          <span>
-             Built by <span className="text-purple-600 uppercase">MR.MINEJES</span>
-          </span>
-          <span className="flex items-center gap-1">
-             💬 Discord: <span className="text-blue-500">SpidyOnRest</span>
-          </span>
+      <div className="flex flex-col gap-1 mt-2">
+          <LiveStats /> 
+          <div className="flex flex-col items-center pt-2 text-[9px] text-gray-400 font-bold uppercase tracking-widest hover:text-black transition-colors">
+            <span>Built by MR.MINEJES</span>
+            <span>Discord: SpidyOnRest</span>
+          </div>
       </div>
 
     </div>

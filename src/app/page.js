@@ -6,7 +6,6 @@ import Visualizer from "../components/Visualizer";
 import { SETUP_CODE } from "../utils/pythonSetup";
 import { useNodesState, useEdgesState } from "reactflow";
 import PresetSelector from "../components/PresetSelector";
-// IMPORT THE NEW TRANSPILER
 import { transpileToPython, TEMPLATES } from "../utils/transpiler";
 
 export default function Home() {
@@ -15,9 +14,9 @@ export default function Home() {
   const [history, setHistory] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   
-  // 🟢 NEW STATE: Language (Default Python)
   const [language, setLanguage] = useState("python");
 
+  // Default Code is now dynamic based on template
   const [code, setCode] = useState(TEMPLATES.python);
   const [output, setOutput] = useState("")
   const [isPyodideReady, setIsPyodideReady] = useState(false);
@@ -25,10 +24,10 @@ export default function Home() {
   const [isAutoRun, setIsAutoRun] = useState(true);
   const [showTutorial, setShowTutorial] = useState(true);
 
-  // Handle Language Switching (Load Template)
+  // When user switches dropdown, we update language and the code in editor
   const handleLanguageChange = (newLang) => {
     setLanguage(newLang);
-    setCode(TEMPLATES[newLang]); // Load the Hello World for that language
+    setCode(TEMPLATES[newLang]); 
   };
 
   useEffect(() => {
@@ -56,12 +55,11 @@ export default function Home() {
     const worker = new Worker("/pyWorker.js");
     window.pyWorker = worker;
 
-    // 🔴 TRANSPILER MAGIC HAPPENS HERE
-    // We convert whatever the user wrote into Python before sending to engine
+    // 1. Transpile (Convert Java/C++ -> Python)
     const rawCode = typeof code === "string" ? code : "";
     const pythonCode = transpileToPython(rawCode, language);
 
-    // Prepare code for execution (Indent & Protect)
+    // 2. Prepare for Python Engine
     const hasCode = pythonCode.split('\n').some(line => line.trim() && !line.trim().startsWith('#'));
     const indentedCode = hasCode ? pythonCode.split('\n').map(line => '    ' + line).join('\n') : '    pass';
     const protectedCode = `try:\n${indentedCode}\nexcept Exception as e:\n    raise e`;
@@ -102,8 +100,8 @@ export default function Home() {
   };
 
   const handlePresetSelect = (newCode) => {
-    // Presets are Python only, so switch back to Python to avoid confusion
-    setLanguage("python"); 
+    // We do NOT switch language here anymore. 
+    // The preset selector already sends the correct code for the current language.
     setCode(newCode);
   };
 
@@ -166,7 +164,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* RIGHT CARD: Code Editor (Pass new props) */}
+      {/* RIGHT CARD: Code Editor */}
       <div className="w-[40%] flex flex-col neo-box bg-white rounded-xl overflow-hidden">
         <div className="flex-grow relative border-b-3 border-black">
           <CodeEditor 
@@ -176,7 +174,9 @@ export default function Home() {
             setLanguage={handleLanguageChange} 
           />
         </div>
-        <PresetSelector onSelect={handlePresetSelect} />
+        
+        {/* Pass Language Prop Here! */}
+        <PresetSelector onSelect={handlePresetSelect} language={language} />
       </div>
 
     </main>
